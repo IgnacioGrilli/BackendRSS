@@ -17,27 +17,29 @@ app.get("/", (req, res) => {
 });
 
 // Ruta para guardar texto asociado a un día
+// Ruta para guardar el nombre asociado a una fecha y hora
 app.post("/save-text", async (req, res) => {
-    const { date, text } = req.body;
+    const { date, hora, text } = req.body;
 
-    // Verificar que se haya enviado la fecha y el texto
-    if (!date || !text) {
-        return res.status(400).json({ error: "Fecha y texto son requeridos" });
+    // Verificar que se haya enviado la fecha, la hora y el nombre
+    if (!date || !hora || !text) {
+        return res.status(400).json({ error: "Fecha, hora y nombre son requeridos" });
     }
 
     try {
         // Realizar la inserción en la base de datos
-        const query = "INSERT INTO texts (date, text) VALUES ($1, $2) RETURNING *";
-        const values = [date, text];
+        const query = "INSERT INTO texts (date, hora, text) VALUES ($1, $2, $3) RETURNING *";
+        const values = [date, hora, text];
         const result = await pool.query(query, values); // Ejecutar la consulta
+
         // Devolver una respuesta con los datos guardados
         res.status(200).json({
-            message: "Texto guardado correctamente",
+            message: "Nombre registrado correctamente",
             data: result.rows[0], // El primer registro insertado
         });
     } catch (error) {
-        console.error("Error al guardar el texto:", error);
-        res.status(500).json({ error: "Error al guardar el texto" });
+        console.error("Error al guardar el nombre:", error);
+        res.status(500).json({ error: "Error al guardar el nombre" });
     }
 });
 
