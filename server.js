@@ -1,7 +1,12 @@
+//server.js
 const express = require("express");
 const pool = require("./db"); // Importa el pool para conectarte a PostgreSQL
 const app = express();
 const port = process.env.PORT || 3000; // Render asigna el puerto automáticamente
+const cors = require('cors');
+
+// Habilitar CORS para todas las solicitudes
+app.use(cors());
 
 // Middleware para procesar JSON
 app.use(express.json());
